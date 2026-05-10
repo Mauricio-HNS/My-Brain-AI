@@ -1,0 +1,77 @@
+<div class="layout">
+  <aside class="sidebar">
+    <h1>AI Document Assistant</h1>
+
+    <label class="upload">
+      Upload PDF/TXT
+      <input type="file" accept=".pdf,.txt" (change)="upload($event)">
+    </label>
+
+    <div class="menu-title">Documents</div>
+
+    <button
+      class="doc"
+      *ngFor="let doc of documents"
+      [class.active]="selected?.id === doc.id"
+      (click)="select(doc)">
+      <strong>{{ doc.fileName }}</strong>
+      <span>{{ doc.totalPages }} pages · {{ doc.totalChunks }} chunks</span>
+    </button>
+  </aside>
+
+  <main class="content">
+    <header>
+      <div>
+        <p class="breadcrumb">Documents</p>
+        <h2>{{ selected?.fileName || 'Upload a document to start' }}</h2>
+      </div>
+      <span class="status" *ngIf="selected">{{ selected.status }}</span>
+    </header>
+
+    <section class="dashboard" *ngIf="selected">
+      <div class="card">
+        <h3>Processing Status</h3>
+        <ul>
+          <li>Text extraction completed</li>
+          <li>Cleaning completed</li>
+          <li>Chunking completed</li>
+          <li>Semantic index prepared</li>
+        </ul>
+      </div>
+
+      <div class="card stats">
+        <h3>Document Stats</h3>
+        <p><span>Total pages</span><strong>{{ selected.totalPages }}</strong></p>
+        <p><span>Total chunks</span><strong>{{ selected.totalChunks }}</strong></p>
+        <p><span>Total tokens</span><strong>{{ selected.totalTokens }}</strong></p>
+        <p><span>Size</span><strong>{{ selected.sizeBytes / 1024 | number:'1.0-0' }} KB</strong></p>
+      </div>
+    </section>
+
+    <section class="chat" *ngIf="selected">
+      <div class="message" *ngFor="let message of messages" [class.user]="message.role === 'user'">
+        <div class="bubble">
+          <pre>{{ message.text }}</pre>
+
+          <div class="sources" *ngIf="message.sources?.length">
+            <h4>Sources</h4>
+            <div class="source" *ngFor="let source of message.sources">
+              <span>Page {{ source.page }}</span>
+              <p>{{ source.preview }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <input
+          [(ngModel)]="question"
+          (keyup.enter)="ask()"
+          placeholder="Ask a question about this document...">
+        <button (click)="ask()" [disabled]="loading">
+          {{ loading ? 'Processing...' : 'Ask' }}
+        </button>
+      </div>
+    </section>
+  </main>
+</div>

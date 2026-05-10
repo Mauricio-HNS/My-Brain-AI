@@ -1,0 +1,18 @@
+name: neurodocs-ai-local
+
+services:
+  document-api:
+    build:
+      context: ../../services/document-api
+    ports:
+      - "5000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+  web:
+    build:
+      context: ../../apps/web
+    ports:
+      - "4200:4200"
+    depends_on:
+      - document-api
