@@ -19,6 +19,14 @@ builder.Services.AddSingleton<RagService>();
 
 var app = builder.Build();
 
+var documentStore = app.Services.GetRequiredService<DocumentStore>();
+var knowledgeStore = app.Services.GetRequiredService<KnowledgeStore>();
+foreach (var document in documentStore.GetAll())
+{
+    if (!knowledgeStore.ContainsDocument(document.Id))
+        knowledgeStore.AddDocument(document);
+}
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors("Frontend");

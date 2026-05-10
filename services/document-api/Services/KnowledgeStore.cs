@@ -80,6 +80,14 @@ public sealed class KnowledgeStore
         }
     }
 
+    public bool ContainsDocument(Guid documentId)
+    {
+        lock (sync)
+        {
+            return entries.Any(x => x.Type == "document" && x.SourceDocumentId == documentId);
+        }
+    }
+
     public KnowledgeAnswer Ask(string question, Guid? documentId = null)
     {
         var queryTerms = ExpandTerms(ExtractTerms(question));
@@ -207,7 +215,21 @@ public sealed class KnowledgeStore
             return;
 
         var json = File.ReadAllText(dataFile);
-        entries = JsonSerializer.Deserialize<List<KnowledgeEntry>>(json, jsonOptions) ?? [];
+        var loadedEntries = JsonSerializer.Deserialize<List<KnowledgeEntry>>(json, jsonOptions) ?? [];
+        entries = loadedEntries.Select(MigrateBrand).ToList();
+
+        var migrated = false;
+        for (var i = 0; i < loadedEntries.Count; i++)
+        {
+            if (loadedEntries[i].Content != entries[i].Content || loadedEntries[i].Title != entries[i].Title)
+            {
+                migrated = true;
+                break;
+            }
+        }
+
+        if (migrated)
+            Save();
     }
 
     private void Save()
@@ -268,6 +290,29 @@ public sealed class KnowledgeStore
             return normalized[..^1];
 
         return normalized;
+    }
+
+    private static KnowledgeEntry MigrateBrand(KnowledgeEntry entry)
+    {
+        return new KnowledgeEntry
+        {
+            Id = entry.Id,
+            Type = entry.Type,
+            Title = ReplaceOldBrand(entry.Title),
+            Content = ReplaceOldBrand(entry.Content),
+            Tags = entry.Tags.Select(ReplaceOldBrand).ToList(),
+            SourceDocumentId = entry.SourceDocumentId,
+            SourceFileName = entry.SourceFileName is null ? null : ReplaceOldBrand(entry.SourceFileName),
+            CreatedAt = entry.CreatedAt
+        };
+    }
+
+    private static string ReplaceOldBrand(string value)
+    {
+        return value
+            .Replace("NeuroDocs AI", "My Brain AI", StringComparison.OrdinalIgnoreCase)
+            .Replace("NeuroDocs-AI", "My-Brain-AI", StringComparison.OrdinalIgnoreCase)
+            .Replace("AI Document Assistant", "My Brain AI", StringComparison.OrdinalIgnoreCase);
     }
 
     private static string Normalize(string value)

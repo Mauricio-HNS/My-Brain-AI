@@ -27,6 +27,7 @@ My-Brain-AI/
 - Image OCR: local macOS Vision OCR in development, with Tesseract OCR available in Docker/Linux
 - RAG MVP: local chunking plus keyword retrieval
 - Runtime: Docker Compose or local Node/.NET processes
+- Persistence: local JSON stores under `services/document-api/data`
 
 ## Run With Docker
 
