@@ -23,7 +23,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors("Frontend");
 
-app.MapGet("/", () => Results.Ok(new { name = "My Brain API", status = "running" }));
+app.MapGet("/", () => Results.Ok(new { name = "My Brain AI API", status = "running" }));
 
 app.MapPost("/api/documents/upload", async (
     IFormFile file,

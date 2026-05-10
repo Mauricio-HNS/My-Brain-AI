@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "projects": {
-    "my-brain": {
+    "my-brain-ai": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
@@ -10,7 +10,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/my-brain",
+            "outputPath": "dist/my-brain-ai",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -22,7 +22,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "my-brain:build"
+            "buildTarget": "my-brain-ai:build"
           }
         }
       }

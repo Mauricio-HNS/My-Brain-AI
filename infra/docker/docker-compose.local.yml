@@ -1,4 +1,4 @@
-name: my-brain-local
+name: my-brain-ai-local
 
 services:
   document-api:

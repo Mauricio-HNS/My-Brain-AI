@@ -1,28 +1,28 @@
-name: my-brain
+name: my-brain-ai
 
 services:
   document-api:
     build:
       context: ./services/document-api
-    container_name: my-brain-document-api
+    container_name: my-brain-ai-document-api
     ports:
       - "5000:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     networks:
-      - my-brain
+      - my-brain-ai
 
   web:
     build:
       context: ./apps/web
-    container_name: my-brain-web
+    container_name: my-brain-ai-web
     ports:
       - "4200:4200"
     depends_on:
       - document-api
     networks:
-      - my-brain
+      - my-brain-ai
 
 networks:
-  my-brain:
+  my-brain-ai:
     driver: bridge

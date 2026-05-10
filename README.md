@@ -1,13 +1,13 @@
-# My Brain
+# My Brain AI
 
-My Brain is a local learning assistant that lets users upload PDF or TXT files, teach memories, correct answers, and ask questions with source snippets returned from the learned knowledge base.
+My Brain AI is a local learning assistant that lets users upload PDF or TXT files, teach memories, correct answers, and ask questions with source snippets returned from the learned knowledge base.
 
 The repository is structured as a microservice-ready monorepo so the web app, backend services, infrastructure, and documentation stay separated. The current version also includes a local learning layer: documents, manual memories, and corrected answers are saved as a private knowledge base without calling external AI APIs.
 
 ## Repository Structure
 
 ```text
-My-Brain/
+My-Brain-AI/
 ├── apps/
 │   └── web/                  # Angular frontend
 ├── services/

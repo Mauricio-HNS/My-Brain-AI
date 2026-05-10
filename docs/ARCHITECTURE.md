@@ -1,6 +1,6 @@
 # Architecture
 
-My Brain is organized as a small microservice-ready monorepo.
+My Brain AI is organized as a small microservice-ready monorepo.
 
 ## Services
 
